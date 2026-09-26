@@ -6,6 +6,10 @@ VISIONSHIELD is a local multimodal evidence agent. Sensor adapters and model ada
 flowchart LR
   RGB[RGB camera] --> Y[YOLO / RGB detector]
   TH[MLX90640 thermal] --> T[Thermal model]
+  RGB --> RS[Timestamped sensor runtime]
+  TH --> RS
+  RS --> Y
+  RS --> T
   TH --> A[Thermal anomaly baseline]
   Y --> F[Visibility-aware evidence fusion]
   T --> F
@@ -29,3 +33,4 @@ flowchart LR
 6. No event is created before `confirmed`.
 7. YOLO weights, datasets, recordings, and credentials remain outside Git.
 8. Confirmed event metadata is retained locally only for the configured retention period.
+9. Sensor pairs more than one second apart are rejected rather than fused.

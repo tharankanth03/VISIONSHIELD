@@ -15,6 +15,7 @@ VISIONSHIELD is a privacy-conscious, edge-oriented multimodal agent for combinin
 - Dependency-free thermal anomaly baseline and perimeter decision module.
 - Local HTML control UI with JSON observation API.
 - Retention-aware local JSONL event history with health and history endpoints.
+- Isolated OpenCV and MLX90640 sensor adapters plus a timestamp-safe runtime bridge.
 - GitHub Actions CI across Python 3.10–3.12.
 - JSON configuration example and a dependency-free CLI smoke run.
 - Architecture, AI implementation, privacy, and terms documentation.
@@ -37,6 +38,8 @@ Open `http://127.0.0.1:8080` for the local control UI. Its simulator form exerci
 The local API also exposes `GET /api/health`, `GET /api/status`, and `GET /api/events`. Confirmed events are stored as minimal JSONL records under `events/` and are automatically removed after `retention_seconds`.
 
 The UI's recent-events panel shows the object label, model confidence, fusion score, UTC timestamp, and event ID for confirmed events.
+
+For hardware integration, use `OpenCVCameraSource`, `MLX90640Source`, and `SensorRuntime`. Hardware timestamps must be within one second or the runtime rejects the pair instead of fusing stale readings.
 
 ## AI models and training
 

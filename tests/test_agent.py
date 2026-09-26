@@ -9,6 +9,7 @@ from visionshield.anomaly import ThermalAnomalyDetector
 from visionshield.perimeter import evaluate
 from visionshield.perception import point_in_polygon
 from visionshield.storage import EventStore
+from visionshield.sensors import MLX90640Source
 
 
 class AgentTests(unittest.TestCase):
@@ -86,6 +87,14 @@ class AgentTests(unittest.TestCase):
             event = self.agent.create_event(self.agent.process(rgb, thermal))
             store.append(event)
             self.assertEqual(store.recent()[0]["event_id"], event.event_id)
+
+    def test_mlx_source_validates_frame_shape(self):
+        source = MLX90640Source(lambda: [20.0] * 768)
+        values, timestamp = source.read()
+        self.assertEqual(len(values), 768)
+        self.assertIsNotNone(timestamp)
+        with self.assertRaises(ValueError):
+            MLX90640Source(lambda: [20.0]).read()
 
     def test_confirmed_event_alert_is_not_repeated(self):
         first_rgb, first_thermal = self.observation()

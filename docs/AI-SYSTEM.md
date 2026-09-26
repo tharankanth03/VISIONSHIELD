@@ -11,6 +11,7 @@ The working system is composed of optional model adapters around a deterministic
 | Phone alerts | Telegram Bot API notifier | Bot token and chat ID stored outside Git |
 | Interface | Local HTML dashboard and JSON API | Real camera/thermal adapters |
 | Event history | Retention-aware local JSONL store | Choose retention before deployment |
+| Sensor runtime | OpenCV/MLX90640 adapters with timestamp guard | Configure real devices and calibration |
 
 The repository does not claim a trained model or measured accuracy without your labeled dataset. Use `scripts/train_yolo.py` for training and `scripts/fit_thermal_baseline.py` for a thermal baseline. Record each released model in `docs/MODEL-GOVERNANCE.md`.
 
