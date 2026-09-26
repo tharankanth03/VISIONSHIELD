@@ -23,6 +23,7 @@ class SensorRuntime:
         if abs((rgb_timestamp - thermal_timestamp).total_seconds()) > 1:
             raise RuntimeError("RGB and thermal captures are more than one second apart.")
         rgb_score = clamp(float(self.rgb_model.score(rgb_frame)))
+        detections = tuple(self.rgb_model.detect(rgb_frame)) if hasattr(self.rgb_model, "detect") else ()
         thermal_result = self.thermal_model.analyze(thermal_frame)
         rgb = FrameObservation(
             timestamp=rgb_timestamp,
@@ -30,6 +31,7 @@ class SensorRuntime:
             change_score=0,
             visibility=1,
             source="rgb-camera",
+            detections=detections,
         )
         thermal = ThermalObservation(
             timestamp=rgb_timestamp,
@@ -38,6 +40,25 @@ class SensorRuntime:
         )
         return self.agent.process(rgb, thermal)
 
+    def run(self, *, max_steps: int | None = None, on_evidence=None) -> int:
+        """Process readings until stopped, returning the number of steps."""
+        completed = 0
+        try:
+            while max_steps is None or completed < max_steps:
+                evidence = self.step()
+                completed += 1
+                if on_evidence is not None:
+                    on_evidence(evidence)
+        finally:
+            self.close()
+        return completed
+
     def close(self) -> None:
-        self.rgb_source.close()
-        self.thermal_source.close()
+        errors = []
+        for source in (self.rgb_source, self.thermal_source):
+            try:
+                source.close()
+            except Exception as exc:
+                errors.append(exc)
+        if errors:
+            raise RuntimeError("One or more sensor sources failed to close.") from errors[0]

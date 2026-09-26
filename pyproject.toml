@@ -19,6 +19,7 @@ dev = ["pytest>=8,<9"]
 [project.scripts]
 visionshield = "visionshield.cli:main"
 visionshield-ui = "visionshield.server:main"
+visionshield-hardware = "visionshield.hardware_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -10,6 +10,7 @@ from visionshield.perimeter import evaluate
 from visionshield.perception import point_in_polygon
 from visionshield.storage import EventStore
 from visionshield.sensors import MLX90640Source
+from visionshield.runtime import SensorRuntime
 
 
 class AgentTests(unittest.TestCase):
@@ -95,6 +96,42 @@ class AgentTests(unittest.TestCase):
         self.assertIsNotNone(timestamp)
         with self.assertRaises(ValueError):
             MLX90640Source(lambda: [20.0]).read()
+
+    def test_runtime_processes_one_paired_step(self):
+        from datetime import timedelta
+
+        class Source:
+            def __init__(self, value):
+                self.value = value
+            def read(self):
+                return self.value, self.timestamp
+            def close(self):
+                pass
+
+        class RGBModel:
+            def score(self, frame):
+                return 0.8
+            def detect(self, frame):
+                return (ObjectDetection("person", 0.88),)
+
+        class ThermalModel:
+            def analyze(self, frame):
+                return ThermalAnomalyDetector(20, 1).analyze(frame)
+
+        timestamp = self.timestamp
+        rgb_source = Source("frame")
+        thermal_source = Source([20.0] * 768)
+        rgb_source.timestamp = timestamp
+        thermal_source.timestamp = timestamp + timedelta(milliseconds=200)
+        runtime = SensorRuntime(self.agent, rgb_source, thermal_source, RGBModel(), ThermalModel())
+        evidence = runtime.step()
+        self.assertEqual(evidence.detected_objects[0].label, "person")
+        runtime.close()
+
+    def test_example_config_loads_hardware_settings(self):
+        from visionshield.config import AgentConfig
+        config = AgentConfig.from_json("config.example.json")
+        self.assertEqual(config.hardware.camera_device, 0)
 
     def test_confirmed_event_alert_is_not_repeated(self):
         first_rgb, first_thermal = self.observation()

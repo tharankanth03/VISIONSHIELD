@@ -12,6 +12,11 @@ The working system is composed of optional model adapters around a deterministic
 | Interface | Local HTML dashboard and JSON API | Real camera/thermal adapters |
 | Event history | Retention-aware local JSONL store | Choose retention before deployment |
 | Sensor runtime | OpenCV/MLX90640 adapters with timestamp guard | Configure real devices and calibration |
+| Hardware command | Validates local YOLO and thermal baseline assets | Supply board-specific MLX90640 bus reader |
+
+`config.example.json` includes the hardware section (`camera_device` and
+`max_sensor_skew_seconds`) consumed by the runtime configuration loader. Use a
+separate untracked local config for real deployment values and credentials.
 
 The repository does not claim a trained model or measured accuracy without your labeled dataset. Use `scripts/train_yolo.py` for training and `scripts/fit_thermal_baseline.py` for a thermal baseline. Record each released model in `docs/MODEL-GOVERNANCE.md`.
 

@@ -59,11 +59,24 @@ class NotificationConfig:
 
 
 @dataclass(frozen=True)
+class HardwareConfig:
+    camera_device: int = 0
+    max_sensor_skew_seconds: float = 1.0
+
+    def __post_init__(self) -> None:
+        if self.camera_device < 0:
+            raise ValueError("camera_device cannot be negative.")
+        if self.max_sensor_skew_seconds <= 0:
+            raise ValueError("max_sensor_skew_seconds must be positive.")
+
+
+@dataclass(frozen=True)
 class AgentConfig:
     fusion: FusionConfig = field(default_factory=FusionConfig)
     retention_seconds: int = 300
     perimeter: tuple[tuple[float, float], ...] = ()
     notifications: NotificationConfig = field(default_factory=NotificationConfig)
+    hardware: HardwareConfig = field(default_factory=HardwareConfig)
 
     def __post_init__(self) -> None:
         if self.retention_seconds < 0:
@@ -77,4 +90,11 @@ class AgentConfig:
         fusion = FusionConfig(**raw.pop("fusion", {}))
         perimeter = tuple(tuple(point) for point in raw.pop("perimeter", []))
         notifications = NotificationConfig(**raw.pop("notifications", {}))
-        return cls(fusion=fusion, perimeter=perimeter, notifications=notifications, **raw)
+        hardware = HardwareConfig(**raw.pop("hardware", {}))
+        return cls(
+            fusion=fusion,
+            perimeter=perimeter,
+            notifications=notifications,
+            hardware=hardware,
+            **raw,
+        )
