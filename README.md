@@ -20,7 +20,6 @@ VISIONSHIELD is a privacy-conscious, edge-oriented multimodal agent for combinin
 - Safe `visionshield-doctor` preflight for configuration and model readiness.
 - Docker and Render Blueprint deployment files for the local UI/API.
 - GitHub Actions CI across Python 3.10–3.12.
-- GitHub Pages documentation site under `docs/` (static files only; it does not run the Python agent).
 - JSON configuration example and a dependency-free CLI smoke run.
 - Architecture, AI implementation, privacy, and terms documentation.
 
@@ -112,7 +111,24 @@ Security concerns belong in [SECURITY.md](SECURITY.md); contribution rules are i
 
 Deployment instructions are in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). The hosted UI/API cannot access sensors attached to a private edge device; run hardware inference on the device and use the hosted service only for an explicitly designed remote integration.
 
-The documentation site is published from `docs/` by `.github/workflows/pages.yml` at the repository's GitHub Pages URL. It is documentation/static content only and never presents the Python runtime as browser-executable.
+Documentation is published from `docs/` by `.github/workflows/pages.yml` as a static GitHub Pages site. It does not run the Python agent, access cameras or thermal sensors, train models, or send alerts in the browser.
+
+## EV Location Finder API
+
+This repository also hosts an independent FastAPI MVP for searching nearby EV chargers. It is intentionally separate from the VisionShield sensor dashboard and uses clearly labelled Bengaluru demo records; the records are not a live availability feed. The API supports CORS for local web clients and exposes:
+
+- `GET /` and `GET /health` for service metadata and hosting health checks.
+- `GET /api/v1/chargers?latitude=12.9716&longitude=77.5946&radius_km=25` for distance-sorted charger results.
+- Optional `connector=CCS2` and `available_only=true` filters. Coordinates and radius are validated.
+
+Run it locally from the repository root:
+
+```bash
+python -m pip install -r backend/requirements.txt
+uvicorn backend.app.main:app --reload --port 8000
+```
+
+The EV API is deployed as the `visionshield-ev-location-api` service in `render.yaml`, using `backend/Dockerfile`. Its interactive OpenAPI documentation is available at `/docs`. Replace the demo dataset with a trusted, consented data provider before presenting charger availability as current.
 
 ## Repository status
 
