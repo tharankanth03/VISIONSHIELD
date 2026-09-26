@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="VISIONSHIELD documentation for a privacy-conscious RGB and thermal evidence agent.">
+  <meta name="theme-color" content="#07111f">
+  <title>VISIONSHIELD documentation</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="./">VISION<span>SHIELD</span></a>
+      <nav aria-label="Primary navigation">
+        <a href="#system">System</a>
+        <a href="#guides">Guides</a>
+        <a href="#policies">Policies</a>
+        <a class="button button-small" href="https://github.com/tharankanth03/VISIONSHIELD">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="eyebrow">DOCUMENTATION / EDGE AI</div>
+      <h1>Multimodal evidence,<br><em>made inspectable.</em></h1>
+      <p class="lede">VISIONSHIELD combines RGB detections, thermal signals, perimeter context, and explicit state transitions for local-first event reasoning.</p>
+      <div class="actions">
+        <a class="button" href="AI-SYSTEM.md">Read the AI system guide <span>→</span></a>
+        <a class="text-link" href="SYSTEM-ARCHITECTURE.md">Explore the architecture <span>↗</span></a>
+      </div>
+    </section>
+
+    <section class="notice wrap" aria-label="Hosting boundary">
+      <div class="notice-icon">i</div>
+      <div>
+        <strong>GitHub Pages hosts documentation only.</strong>
+        <p>This static site does not run the Python agent, access cameras or MLX90640 sensors, train YOLO, or send Telegram alerts. Run the agent on an edge device or deploy its API separately using the documented Docker/Render path.</p>
+      </div>
+    </section>
+
+    <section id="system" class="section wrap">
+      <div class="section-heading">
+        <div class="eyebrow">01 / SYSTEM</div>
+        <h2>One repository.<br><span>Clear boundaries.</span></h2>
+      </div>
+      <div class="cards">
+        <a class="card" href="SYSTEM-ARCHITECTURE.md">
+          <span class="card-index">01</span>
+          <h3>System architecture</h3>
+          <p>Follow the path from timestamped sensors through YOLO, anomaly scoring, fusion, event storage, and notifications.</p>
+          <span class="card-link">Open guide →</span>
+        </a>
+        <a class="card" href="AI-SYSTEM.md">
+          <span class="card-index">02</span>
+          <h3>AI system</h3>
+          <p>Understand what is implemented, what requires model assets, and how training and validation are governed.</p>
+          <span class="card-link">Open guide →</span>
+        </a>
+        <a class="card" href="MODEL-GOVERNANCE.md">
+          <span class="card-index">03</span>
+          <h3>Model governance</h3>
+          <p>Use release gates for datasets, licenses, calibration, held-out evaluation, failure cases, and rollback.</p>
+          <span class="card-link">Open guide →</span>
+        </a>
+      </div>
+    </section>
+
+    <section id="guides" class="section section-dark">
+      <div class="wrap">
+        <div class="section-heading">
+          <div class="eyebrow">02 / GUIDES</div>
+          <h2>Build deliberately.<br><em>Operate locally.</em></h2>
+        </div>
+        <div class="guide-list">
+          <a href="DEPLOYMENT.md"><span>Deployment</span><small>Docker, Render, local UI/API, and hardware boundaries</small><b>↗</b></a>
+          <a href="https://github.com/tharankanth03/VISIONSHIELD/blob/main/README.md"><span>Quick start</span><small>Install, test, run the CLI, and launch the local dashboard</small><b>↗</b></a>
+          <a href="https://github.com/tharankanth03/VISIONSHIELD/blob/main/CONTRIBUTING.md"><span>Contributing</span><small>Development setup and change requirements</small><b>↗</b></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="policies" class="section wrap">
+      <div class="section-heading">
+        <div class="eyebrow">03 / POLICIES</div>
+        <h2>Trust is<br><span>part of the system.</span></h2>
+      </div>
+      <div class="policy-grid">
+        <a href="PRIVACY-POLICY.md"><strong>Privacy policy</strong><span>Data minimization, retention, consent →</span></a>
+        <a href="TERMS-OF-USE.md"><strong>Terms of use</strong><span>Responsible operation and limitations →</span></a>
+        <a href="https://github.com/tharankanth03/VISIONSHIELD/blob/main/SECURITY.md"><strong>Security policy</strong><span>Secrets, deployment, reporting →</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span class="brand">VISION<span>SHIELD</span></span>
+      <span>Documentation site · Python runtime is separate</span>
+      <span>© 2026</span>
+    </div>
+  </footer>
+</body>
+</html>

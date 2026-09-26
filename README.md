@@ -20,6 +20,7 @@ VISIONSHIELD is a privacy-conscious, edge-oriented multimodal agent for combinin
 - Safe `visionshield-doctor` preflight for configuration and model readiness.
 - Docker and Render Blueprint deployment files for the local UI/API.
 - GitHub Actions CI across Python 3.10–3.12.
+- GitHub Pages documentation site under `docs/` (static files only; it does not run the Python agent).
 - JSON configuration example and a dependency-free CLI smoke run.
 - Architecture, AI implementation, privacy, and terms documentation.
 
@@ -110,6 +111,8 @@ Before connecting sensors, define consent and notice, retention and deletion, op
 Security concerns belong in [SECURITY.md](SECURITY.md); contribution rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Deployment instructions are in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). The hosted UI/API cannot access sensors attached to a private edge device; run hardware inference on the device and use the hosted service only for an explicitly designed remote integration.
+
+The documentation site is published from `docs/` by `.github/workflows/pages.yml` at the repository's GitHub Pages URL. It is documentation/static content only and never presents the Python runtime as browser-executable.
 
 ## Repository status
 
