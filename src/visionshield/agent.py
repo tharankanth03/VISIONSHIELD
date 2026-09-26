@@ -1,6 +1,8 @@
 """The VISIONSHIELD multimodal orchestration agent."""
 
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from typing import Optional
 from hashlib import sha256
 from typing import Sequence
 
@@ -28,6 +30,7 @@ class VisionShieldAgent:
     state_machine: EventStateMachine = field(init=False)
     _history: list[float] = field(default_factory=list, init=False)
     _event_sequence: int = field(default=0, init=False)
+    _last_alert_at: Optional[datetime] = field(default=None, init=False)
 
     def __post_init__(self) -> None:
         self.state_machine = EventStateMachine(self.config.fusion)
@@ -68,9 +71,15 @@ class VisionShieldAgent:
             detected_objects=rgb.detections,
             thermal_active=thermal_score >= self.config.fusion.thermal_activation_threshold,
         )
-        if previous_state != state and state.value == "confirmed":
+        cooldown = timedelta(seconds=self.config.notifications.cooldown_seconds)
+        can_alert = (
+            self._last_alert_at is None
+            or evidence.timestamp - self._last_alert_at >= cooldown
+        )
+        if previous_state != state and state.value == "confirmed" and can_alert:
             event = self.create_event(evidence)
             self.notifier.send(self.notifier.format_event(event))
+            self._last_alert_at = evidence.timestamp
         return evidence
 
     def create_event(self, evidence: Evidence, metadata: dict | None = None) -> Event:

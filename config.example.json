@@ -4,7 +4,8 @@
   "notifications": {
     "telegram_bot_token": "",
     "telegram_chat_id": "",
-    "timeout_seconds": 10
+    "timeout_seconds": 10,
+    "cooldown_seconds": 300
   },
   "fusion": {
     "rgb_weight": 0.35,

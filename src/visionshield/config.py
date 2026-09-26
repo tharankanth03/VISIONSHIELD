@@ -45,6 +45,7 @@ class NotificationConfig:
     telegram_bot_token: str = ""
     telegram_chat_id: str = ""
     timeout_seconds: float = 10.0
+    cooldown_seconds: int = 300
 
     @property
     def enabled(self) -> bool:
@@ -53,6 +54,8 @@ class NotificationConfig:
     def __post_init__(self) -> None:
         if self.timeout_seconds <= 0:
             raise ValueError("Notification timeout must be positive.")
+        if self.cooldown_seconds < 0:
+            raise ValueError("Notification cooldown cannot be negative.")
 
 
 @dataclass(frozen=True)

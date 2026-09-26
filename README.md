@@ -44,6 +44,8 @@ Telegram is the simplest supported phone integration. Create a Telegram bot with
 
 When RGB and thermal evidence remain above the configured threshold, the agent sends one plain-text alert on the transition to `confirmed`. The message includes the detected object labels and confidence, RGB evidence, thermal sensor status, fusion score, event ID, and UTC time. Alerts are disabled when either setting is blank. Network failures are raised explicitly rather than silently treated as delivered.
 
+The default `cooldown_seconds` value prevents repeated alerts while the same event remains confirmed. Set it to `0` only when every confirmed transition should be delivered to the phone.
+
 ## Architecture
 
 Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [docs/AI-IMPLEMENTATION.md](docs/AI-IMPLEMENTATION.md) for the contracts, data flow, invariants, and integration plan.

@@ -24,7 +24,7 @@ flowchart LR
 5. `fuse_scores` calculates a transparent weighted score and records explanations for degraded or incomplete evidence.
 6. `EventStateMachine` requires consecutive high scores before confirmation and clears after a low score.
 7. Only confirmed evidence can create a deterministic, minimal event ID.
-8. The configured notifier sends a plain-text alert only when the state changes into `confirmed`.
+8. The configured notifier sends a plain-text alert only when the state changes into `confirmed` and the alert cooldown has elapsed.
 
 ## Extension points
 
@@ -37,4 +37,5 @@ The included passthrough adapters are deliberately dependency-free and determini
 - Scores are bounded and configuration weights must sum to one.
 - Event creation is blocked until the state machine reaches `confirmed`.
 - Alert delivery is opt-in and never embeds credentials in source code.
+- Alert cooldown prevents a sustained event from flooding the phone.
 - Retention, consent, access control, and deletion must be implemented by the runtime consumer before deployment.

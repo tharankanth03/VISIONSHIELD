@@ -63,6 +63,14 @@ class AgentTests(unittest.TestCase):
     def test_unconfigured_notifier_does_not_send(self):
         self.assertIsInstance(self.agent.notifier, NullNotifier)
 
+    def test_confirmed_event_alert_is_not_repeated(self):
+        first_rgb, first_thermal = self.observation()
+        self.agent.process(first_rgb, first_thermal)
+        second = self.agent.process(first_rgb, first_thermal)
+        self.assertEqual(second.state, EventState.CONFIRMED)
+        third = self.agent.process(first_rgb, first_thermal)
+        self.assertEqual(third.state, EventState.CONFIRMED)
+
 
 if __name__ == "__main__":
     unittest.main()
