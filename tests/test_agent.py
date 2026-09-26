@@ -11,6 +11,7 @@ from visionshield.perception import point_in_polygon
 from visionshield.storage import EventStore
 from visionshield.sensors import MLX90640Source
 from visionshield.runtime import SensorRuntime
+from visionshield.doctor import check
 
 
 class AgentTests(unittest.TestCase):
@@ -132,6 +133,11 @@ class AgentTests(unittest.TestCase):
         from visionshield.config import AgentConfig
         config = AgentConfig.from_json("config.example.json")
         self.assertEqual(config.hardware.camera_device, 0)
+
+    def test_doctor_validates_example_configuration_without_hardware(self):
+        result = check(__import__("pathlib").Path("config.example.json"), None, None)
+        self.assertTrue(result["ready"])
+        self.assertFalse(result["alerts_enabled"])
 
     def test_confirmed_event_alert_is_not_repeated(self):
         first_rgb, first_thermal = self.observation()

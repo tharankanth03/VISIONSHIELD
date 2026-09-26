@@ -17,6 +17,7 @@ VISIONSHIELD is a privacy-conscious, edge-oriented multimodal agent for combinin
 - Retention-aware local JSONL event history with health and history endpoints.
 - Isolated OpenCV and MLX90640 sensor adapters plus a timestamp-safe runtime bridge.
 - Explicit hardware command that refuses missing weights/baselines instead of silently using simulator data.
+- Safe `visionshield-doctor` preflight for configuration and model readiness.
 - GitHub Actions CI across Python 3.10–3.12.
 - JSON configuration example and a dependency-free CLI smoke run.
 - Architecture, AI implementation, privacy, and terms documentation.
@@ -51,6 +52,14 @@ visionshield-hardware --config config.local.json --weights models/yolo.pt --ther
 The command validates local model assets and stops with an explicit message until a board-specific MLX90640 bus reader is supplied. This is deliberate: sensor libraries differ by board and the project must not pretend to read hardware it cannot access.
 
 The example configuration is schema-validated at load time, including hardware, fusion, notification, retention, and perimeter settings. Invalid thresholds, weights, frame sizes, or sensor timing fail explicitly.
+
+Before starting hardware, run:
+
+```bash
+visionshield-doctor --config config.local.json --weights models/yolo.pt --thermal-baseline models/thermal-baseline.json
+```
+
+The doctor reports JSON, exits non-zero when required files or configuration are invalid, and never opens a camera or sends a notification.
 
 ## AI models and training
 
