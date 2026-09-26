@@ -1,0 +1,15 @@
+.git
+.github
+.pytest_cache
+.venv
+__pycache__
+*.py[cod]
+.env
+events
+recordings
+datasets
+runs
+docs
+*.pdf
+*.png
+*.docx

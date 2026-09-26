@@ -5,3 +5,10 @@ services:
     plan: free
     healthCheckPath: /api/health
     autoDeploy: true
+  - type: web
+    name: visionshield-ev-location-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true

@@ -111,6 +111,23 @@ Security concerns belong in [SECURITY.md](SECURITY.md); contribution rules are i
 
 Deployment instructions are in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). The hosted UI/API cannot access sensors attached to a private edge device; run hardware inference on the device and use the hosted service only for an explicitly designed remote integration.
 
+## EV Location Finder API
+
+This repository also hosts an independent FastAPI MVP for searching nearby EV chargers. It is intentionally separate from the VisionShield sensor dashboard and uses clearly labelled Bengaluru demo records; the records are not a live availability feed. The API supports CORS for local web clients and exposes:
+
+- `GET /` and `GET /health` for service metadata and hosting health checks.
+- `GET /api/v1/chargers?latitude=12.9716&longitude=77.5946&radius_km=25` for distance-sorted charger results.
+- Optional `connector=CCS2` and `available_only=true` filters. Coordinates and radius are validated.
+
+Run it locally from the repository root:
+
+```bash
+python -m pip install -r backend/requirements.txt
+uvicorn backend.app.main:app --reload --port 8000
+```
+
+The EV API is deployed as the `visionshield-ev-location-api` service in `render.yaml`, using `backend/Dockerfile`. Its interactive OpenAPI documentation is available at `/docs`. Replace the demo dataset with a trusted, consented data provider before presenting charger availability as current.
+
 ## Repository status
 
 The orchestration foundation is implemented and tested. Hardware adapters, trained models, production persistence, notifications, and measured evaluation results are intentionally not included yet. No API keys, secrets, datasets, recordings, or model weights belong in this repository.
