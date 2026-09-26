@@ -1,33 +1,38 @@
-# AI implementation notes
+# AI implementation
 
-## Scope
+VISIONSHIELD is now an executable multimodal agent foundation, not a marketing website. The agent coordinates RGB evidence, thermal evidence, deterministic scene context, visibility-aware fusion, and a persistent event state machine.
 
-The supplied implementation plan describes an edge-first, multimodal pipeline for RGB and low-resolution thermal sensing. It recommends independent perception modules and evidence-level fusion so that a degraded sensor does not receive unqualified trust.
+## Current implementation
 
-The following boundaries are proposed for a future implementation:
-
-| Component | Proposed approach | Training status |
+| Layer | Implementation | Boundary |
 | --- | --- | --- |
-| RGB detector | Lightweight, edge-compatible object detector | Select and validate on project data |
-| Thermal analysis | Small model or statistical activity detector for 32×24 MLX90640 frames | Requires project-specific thermal data |
-| Visibility | Sharpness, contrast, brightness, and edge-density signals | Conventional computer vision |
-| Temporal change | Stabilization, background comparison, and persistence filtering | Conventional computer vision |
-| Perimeter | User-defined polygon and centroid/bounding-box intersection checks | Deterministic |
-| Evidence fusion | Weighted, visibility-aware score with a confirmation state machine | Tune only against a validation set |
-| Dashboard | Local display of sensor health, evidence, and event metadata | Not implemented |
+| Input contracts | Typed RGB and thermal observations | Requires real sensor adapters |
+| RGB model | `RGBDetector` protocol plus deterministic passthrough adapter | Replace with a validated edge detector |
+| Thermal model | `ThermalModel` protocol plus deterministic passthrough adapter | Replace with an MLX90640 model |
+| Context | Perimeter point-in-polygon and calibrated scores | Add production change/visibility adapters |
+| Fusion | Weighted score with visibility-aware RGB reliability | Tune only on held-out validation data |
+| Agent | Timestamp validation, persistence, event creation | Add runtime storage/notification consumers |
 
-## Agent and model policy
+The default adapters accept supplied scores so the orchestration can be tested without pretending a trained model exists. They are not production detectors.
 
-Any future AI agent must be constrained to the repository's documented interfaces and must not invent detections, confidence values, sensor readings, evaluation results, or notifications. Agent outputs should include provenance and timestamps where applicable, and uncertain results should remain explicitly uncertain.
+## Run locally
 
-Model weights, datasets, recordings, local databases, credentials, and runtime configuration must remain outside version control unless their redistribution rights and privacy implications have been reviewed. The repository's `.gitignore` excludes common secret, recording, dataset, database, and model-weight patterns.
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+python -m pip install -e .
+python -m unittest discover -s tests -v
+visionshield --config config.example.json
+```
 
-The proposed event path is:
+No API keys or hosted AI services are required. Keep any future model credentials and local configuration outside Git.
 
-`RGB + thermal inputs → independent evidence → visibility-aware fusion → persistence check → event record`
+## Required next adapters
 
-Fusion weights and thresholds must be measured on a held-out validation set. They must not be chosen to produce a desired success rate, and this repository currently contains no validated metrics.
+1. Implement the RGB camera adapter and validate a lightweight detector on representative, consented data.
+2. Implement MLX90640 capture, calibration, and a thermal activity model.
+3. Add frame-level visibility and temporal change measurements.
+4. Add retention-aware event storage and an explicitly authorized notification adapter.
+5. Evaluate RGB-only, thermal-only, and fused modes on a held-out dataset; publish measured results rather than assumed metrics.
 
-## Implementation gate
-
-Before calling the system production-ready, add executable source, pinned dependencies, tests for each module, an evaluation protocol, data-retention controls, and reproducible build/deployment instructions. Until then, this document is an implementation guide only.
+See [ARCHITECTURE.md](ARCHITECTURE.md) for data flow and invariants.

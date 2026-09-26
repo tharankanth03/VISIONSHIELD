@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
-  <title>VISIONSHIELD</title>
-  <rect width="64" height="64" rx="14" fill="#101827"/>
-  <path d="M32 10 50 17v13c0 12-7.5 20.3-18 24C21.5 50.3 14 42 14 30V17l18-7Z" fill="#4fd1c5"/>
-  <path d="m23 31 6 6 13-14" fill="none" stroke="#101827" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
-</svg>
