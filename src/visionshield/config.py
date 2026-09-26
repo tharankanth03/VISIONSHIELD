@@ -16,6 +16,7 @@ class FusionConfig:
     confirmation_threshold: float = 0.65
     clear_threshold: float = 0.35
     required_confirmations: int = 2
+    thermal_activation_threshold: float = 0.5
 
     def __post_init__(self) -> None:
         weights = (
@@ -33,6 +34,25 @@ class FusionConfig:
             raise ValueError("Thresholds must satisfy 0 <= clear <= confirm <= 1.")
         if self.required_confirmations < 1:
             raise ValueError("required_confirmations must be at least 1.")
+        if not 0 <= self.thermal_activation_threshold <= 1:
+            raise ValueError("thermal_activation_threshold must be between 0 and 1.")
+
+
+@dataclass(frozen=True)
+class NotificationConfig:
+    """Optional Telegram notification settings; blank token means disabled."""
+
+    telegram_bot_token: str = ""
+    telegram_chat_id: str = ""
+    timeout_seconds: float = 10.0
+
+    @property
+    def enabled(self) -> bool:
+        return bool(self.telegram_bot_token and self.telegram_chat_id)
+
+    def __post_init__(self) -> None:
+        if self.timeout_seconds <= 0:
+            raise ValueError("Notification timeout must be positive.")
 
 
 @dataclass(frozen=True)
@@ -40,6 +60,7 @@ class AgentConfig:
     fusion: FusionConfig = field(default_factory=FusionConfig)
     retention_seconds: int = 300
     perimeter: tuple[tuple[float, float], ...] = ()
+    notifications: NotificationConfig = field(default_factory=NotificationConfig)
 
     def __post_init__(self) -> None:
         if self.retention_seconds < 0:
@@ -52,4 +73,5 @@ class AgentConfig:
         raw: dict[str, Any] = json.loads(Path(path).read_text(encoding="utf-8"))
         fusion = FusionConfig(**raw.pop("fusion", {}))
         perimeter = tuple(tuple(point) for point in raw.pop("perimeter", []))
-        return cls(fusion=fusion, perimeter=perimeter, **raw)
+        notifications = NotificationConfig(**raw.pop("notifications", {}))
+        return cls(fusion=fusion, perimeter=perimeter, notifications=notifications, **raw)

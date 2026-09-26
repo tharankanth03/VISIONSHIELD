@@ -10,6 +10,7 @@ VISIONSHIELD is a privacy-conscious, edge-oriented multimodal agent for combinin
 - Visibility-aware weighted evidence fusion.
 - Persistent `clear → candidate → confirmed` event state machine.
 - Deterministic, minimal event records.
+- Plain-text phone alerts through an optional Telegram bot integration.
 - JSON configuration example and a dependency-free CLI smoke run.
 - Architecture, AI implementation, privacy, and terms documentation.
 
@@ -25,7 +26,23 @@ python -m unittest discover -s tests -v
 visionshield --config config.example.json
 ```
 
-The default CLI uses deterministic passthrough scores to exercise orchestration. It does not claim to detect people or objects. Replace those adapters only after validating real camera and thermal models.
+The default CLI uses deterministic passthrough scores to exercise orchestration. It reports a sample `person` label only because the CLI input supplies that label; it does not claim to detect people. Replace those adapters only after validating real camera and thermal models.
+
+## Phone alerts
+
+Telegram is the simplest supported phone integration. Create a Telegram bot with `@BotFather`, send the bot one message, obtain the target chat ID, and place the values in a local config file (never commit the real token):
+
+```json
+{
+  "notifications": {
+    "telegram_bot_token": "YOUR_BOT_TOKEN",
+    "telegram_chat_id": "YOUR_CHAT_ID",
+    "timeout_seconds": 10
+  }
+}
+```
+
+When RGB and thermal evidence remain above the configured threshold, the agent sends one plain-text alert on the transition to `confirmed`. The message includes the detected object labels and confidence, RGB evidence, thermal sensor status, fusion score, event ID, and UTC time. Alerts are disabled when either setting is blank. Network failures are raised explicitly rather than silently treated as delivered.
 
 ## Architecture
 

@@ -1,6 +1,11 @@
 {
   "retention_seconds": 300,
   "perimeter": [[0.1, 0.1], [0.9, 0.1], [0.9, 0.9], [0.1, 0.9]],
+  "notifications": {
+    "telegram_bot_token": "",
+    "telegram_chat_id": "",
+    "timeout_seconds": 10
+  },
   "fusion": {
     "rgb_weight": 0.35,
     "thermal_weight": 0.3,
@@ -9,6 +14,7 @@
     "persistence_weight": 0.1,
     "confirmation_threshold": 0.65,
     "clear_threshold": 0.35,
-    "required_confirmations": 2
+    "required_confirmations": 2,
+    "thermal_activation_threshold": 0.5
   }
 }

@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from enum import StrEnum
+from enum import Enum
 from typing import Any
 
 
@@ -10,10 +10,27 @@ def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-class EventState(StrEnum):
+class EventState(str, Enum):
     CLEAR = "clear"
     CANDIDATE = "candidate"
     CONFIRMED = "confirmed"
+
+
+@dataclass(frozen=True)
+class ObjectDetection:
+    """A model-reported object label and calibrated confidence."""
+
+    label: str
+    confidence: float
+
+    def __post_init__(self) -> None:
+        if not self.label.strip():
+            raise ValueError("Detection label cannot be empty.")
+        if not 0 <= self.confidence <= 1:
+            raise ValueError("Detection confidence must be between 0 and 1.")
+
+    def as_dict(self) -> dict[str, Any]:
+        return {"label": self.label, "confidence": self.confidence}
 
 
 @dataclass(frozen=True)
@@ -24,6 +41,7 @@ class FrameObservation:
     visibility: float = 1.0
     centroid: tuple[float, float] | None = None
     source: str = "rgb"
+    detections: tuple[ObjectDetection, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -45,6 +63,8 @@ class Evidence:
     score: float
     state: EventState
     explanations: tuple[str, ...] = ()
+    detected_objects: tuple[ObjectDetection, ...] = ()
+    thermal_active: bool = False
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -58,6 +78,8 @@ class Evidence:
             "score": self.score,
             "state": self.state.value,
             "explanations": list(self.explanations),
+            "detected_objects": [item.as_dict() for item in self.detected_objects],
+            "thermal_active": self.thermal_active,
         }
 
 

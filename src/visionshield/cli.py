@@ -7,7 +7,8 @@ from pathlib import Path
 
 from .agent import VisionShieldAgent
 from .config import AgentConfig
-from .models import FrameObservation, ThermalObservation
+from .models import FrameObservation, ObjectDetection, ThermalObservation
+from .notifier import NullNotifier, TelegramNotifier
 
 
 def main() -> None:
@@ -19,11 +20,21 @@ def main() -> None:
     parser.add_argument("--change-score", type=float, default=0.7)
     parser.add_argument("--x", type=float, default=0.5)
     parser.add_argument("--y", type=float, default=0.5)
+    parser.add_argument("--object", dest="object_label", default="person")
+    parser.add_argument("--object-confidence", type=float, default=0.8)
     args = parser.parse_args()
     config = AgentConfig.from_json(args.config) if args.config else AgentConfig()
-    agent = VisionShieldAgent(config)
+    notifier = TelegramNotifier(
+        config.notifications.telegram_bot_token,
+        config.notifications.telegram_chat_id,
+        config.notifications.timeout_seconds,
+    ) if config.notifications.enabled else None
+    agent = VisionShieldAgent(config, notifier=notifier or NullNotifier())
     timestamp = datetime.now(timezone.utc)
-    rgb = FrameObservation(timestamp, args.rgb_score, args.change_score, args.visibility, (args.x, args.y))
+    rgb = FrameObservation(
+        timestamp, args.rgb_score, args.change_score, args.visibility, (args.x, args.y),
+        detections=(ObjectDetection(args.object_label, args.object_confidence),),
+    )
     thermal = ThermalObservation(timestamp, args.thermal_score)
     evidence = agent.process(rgb, thermal)
     print(json.dumps(evidence.as_dict(), indent=2))

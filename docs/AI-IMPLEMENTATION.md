@@ -12,8 +12,11 @@ VISIONSHIELD is now an executable multimodal agent foundation, not a marketing w
 | Context | Perimeter point-in-polygon and calibrated scores | Add production change/visibility adapters |
 | Fusion | Weighted score with visibility-aware RGB reliability | Tune only on held-out validation data |
 | Agent | Timestamp validation, persistence, event creation | Add runtime storage/notification consumers |
+| Phone alerts | Optional Telegram Bot API notifier | Configure a bot token and chat ID outside Git |
 
 The default adapters accept supplied scores so the orchestration can be tested without pretending a trained model exists. They are not production detectors.
+
+Detected labels come from the RGB model adapter as `ObjectDetection` records. The agent does not infer or invent labels. A confirmed event formats those labels into a plain-text alert together with RGB and thermal sensor status.
 
 ## Run locally
 
@@ -22,10 +25,10 @@ python -m venv .venv
 .venv\Scripts\activate
 python -m pip install -e .
 python -m unittest discover -s tests -v
-visionshield --config config.example.json
+visionshield --config config.example.json --object person
 ```
 
-No API keys or hosted AI services are required. Keep any future model credentials and local configuration outside Git.
+Telegram alerts are optional and use the standard Bot API over HTTPS. Keep the bot token, chat ID, and all other credentials in a local untracked config file; `config.example.json` contains blanks only. No alert is sent unless both Telegram fields are configured.
 
 ## Required next adapters
 
