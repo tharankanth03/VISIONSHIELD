@@ -36,6 +36,8 @@ Open `http://127.0.0.1:8080` for the local control UI. Its simulator form exerci
 
 The local API also exposes `GET /api/health`, `GET /api/status`, and `GET /api/events`. Confirmed events are stored as minimal JSONL records under `events/` and are automatically removed after `retention_seconds`.
 
+The UI's recent-events panel shows the object label, model confidence, fusion score, UTC timestamp, and event ID for confirmed events.
+
 ## AI models and training
 
 Install optional model dependencies only when you are ready to supply data:
