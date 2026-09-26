@@ -1,0 +1,50 @@
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Node and frontend tooling (if implementation is added later)
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# Local data, recordings, model outputs, and databases
+events/
+recordings/
+datasets/
+*.db
+*.sqlite
+*.sqlite3
+*.onnx
+*.pt
+*.pth
+*.tflite
+
+# Coverage and logs
+.coverage
+htmlcov/
+coverage/
+*.log
