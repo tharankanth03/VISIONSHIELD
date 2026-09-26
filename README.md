@@ -18,6 +18,7 @@ VISIONSHIELD is a privacy-conscious, edge-oriented multimodal agent for combinin
 - Isolated OpenCV and MLX90640 sensor adapters plus a timestamp-safe runtime bridge.
 - Explicit hardware command that refuses missing weights/baselines instead of silently using simulator data.
 - Safe `visionshield-doctor` preflight for configuration and model readiness.
+- Docker and Render Blueprint deployment files for the local UI/API.
 - GitHub Actions CI across Python 3.10–3.12.
 - JSON configuration example and a dependency-free CLI smoke run.
 - Architecture, AI implementation, privacy, and terms documentation.
@@ -107,6 +108,8 @@ Read [docs/SYSTEM-ARCHITECTURE.md](docs/SYSTEM-ARCHITECTURE.md), [docs/AI-SYSTEM
 Before connecting sensors, define consent and notice, retention and deletion, operator access, failure behavior, and applicable law. Do not use an unvalidated system for emergency response or decisions about a person's identity, eligibility, or rights. See [docs/PRIVACY-POLICY.md](docs/PRIVACY-POLICY.md) and [docs/TERMS-OF-USE.md](docs/TERMS-OF-USE.md).
 
 Security concerns belong in [SECURITY.md](SECURITY.md); contribution rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Deployment instructions are in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). The hosted UI/API cannot access sensors attached to a private edge device; run hardware inference on the device and use the hosted service only for an explicitly designed remote integration.
 
 ## Repository status
 

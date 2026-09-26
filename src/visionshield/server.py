@@ -2,6 +2,7 @@
 
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -100,8 +101,10 @@ class DashboardHandler(BaseHTTPRequestHandler):
 
 
 def main() -> None:
-    server = ThreadingHTTPServer(("127.0.0.1", 8080), DashboardHandler)
-    print("VISIONSHIELD UI: http://127.0.0.1:8080")
+    host = os.environ.get("VISIONSHIELD_HOST", "127.0.0.1")
+    port = int(os.environ.get("PORT", "8080"))
+    server = ThreadingHTTPServer((host, port), DashboardHandler)
+    print(f"VISIONSHIELD UI: http://{host}:{port}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
