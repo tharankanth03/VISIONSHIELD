@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="VISIONSHIELD is an edge-first RGB and thermal sensing research platform for privacy-conscious perimeter awareness.">
+  <meta name="theme-color" content="#07111f">
+  <title>VISIONSHIELD — Edge intelligence, designed responsibly</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="VISIONSHIELD home">
+        <img src="favicon.svg" alt="" width="34" height="34">
+        <span>VISION<span class="brand-accent">SHIELD</span></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu">Menu</button>
+      <div id="site-menu" class="nav-links">
+        <a href="#approach">Approach</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#research">Research</a>
+        <a href="#principles">Principles</a>
+        <a class="nav-cta" href="docs/AI-IMPLEMENTATION.md">Read the plan</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> NIGHTJAR / VISIONSHIELD-X</p>
+          <h1>Edge intelligence.<br><em>Designed responsibly.</em></h1>
+          <p class="hero-lede">A research direction for privacy-conscious RGB and thermal sensing that keeps evidence local, uncertainty visible, and decisions explainable.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#approach">Explore the approach <span aria-hidden="true">→</span></a>
+            <a class="button button-quiet" href="README.md">View project notes <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="hero-status" role="status">
+            <span class="status-pulse"></span>
+            <span><strong>Research archive</strong> · implementation planning phase</span>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Illustration of RGB and thermal evidence converging">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="signal signal-rgb"><span>RGB</span></div>
+          <div class="signal signal-thermal"><span>THERMAL</span></div>
+          <div class="shield-mark"><img src="favicon.svg" alt=""></div>
+          <div class="visual-caption"><span>LOCAL FUSION</span><span>·</span><span>EXPLAINABLE EVIDENCE</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="approach" class="section section-light">
+      <div class="container split-heading">
+        <div>
+          <p class="eyebrow eyebrow-dark">01 / THE APPROACH</p>
+          <h2>See more clearly.<br><span>Assume less.</span></h2>
+        </div>
+        <p class="section-intro">VISIONSHIELD is designed around a simple idea: no single sensor should be trusted blindly. Independent signals are evaluated together, with visibility and persistence shaping how much confidence an event deserves.</p>
+      </div>
+      <div class="container feature-grid">
+        <article class="feature-card">
+          <div class="feature-number">01</div>
+          <h3>Multimodal by design</h3>
+          <p>RGB and low-resolution thermal evidence complement one another when lighting, weather, or the scene itself is difficult.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-number">02</div>
+          <h3>Local by default</h3>
+          <p>The proposed edge architecture keeps sensing and first-stage decisions close to the device, reducing unnecessary data movement.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-number">03</div>
+          <h3>Evidence over certainty</h3>
+          <p>Persistent, multi-signal evidence should be required before an event is confirmed. Unknown stays unknown until validated.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="architecture" class="section section-dark">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">02 / SYSTEM ARCHITECTURE</p>
+          <h2>Small signals.<br><em>One coherent picture.</em></h2>
+          <p>Independent modules make the proposed V1 easier to test, tune, and understand on edge hardware.</p>
+        </div>
+        <div class="pipeline" aria-label="VISIONSHIELD processing pipeline">
+          <div class="pipeline-step"><span class="step-icon">◌</span><strong>Capture</strong><small>RGB + MLX90640</small></div>
+          <span class="pipeline-arrow">→</span>
+          <div class="pipeline-step"><span class="step-icon">◈</span><strong>Interpret</strong><small>Detection + change</small></div>
+          <span class="pipeline-arrow">→</span>
+          <div class="pipeline-step"><span class="step-icon">⊙</span><strong>Qualify</strong><small>Visibility + perimeter</small></div>
+          <span class="pipeline-arrow">→</span>
+          <div class="pipeline-step pipeline-highlight"><span class="step-icon">✦</span><strong>Fuse</strong><small>Evidence + persistence</small></div>
+          <span class="pipeline-arrow">→</span>
+          <div class="pipeline-step"><span class="step-icon">□</span><strong>Record</strong><small>Minimal event data</small></div>
+        </div>
+        <div class="architecture-note">
+          <span class="note-line"></span>
+          <p><strong>Visibility-aware weighting</strong> reduces reliance on a degraded RGB signal. It is a design principle to validate—not a claimed performance result.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="research" class="section section-light">
+      <div class="container research-layout">
+        <div class="section-heading">
+          <p class="eyebrow eyebrow-dark">03 / RESEARCH TO IMPLEMENTATION</p>
+          <h2>From papers<br><span>to a practical V1.</span></h2>
+        </div>
+        <div class="research-list">
+          <article class="research-row">
+            <span class="research-index">A</span>
+            <div><h3>RGB object detection</h3><p>Start with a lightweight edge-compatible detector, then validate it against the actual camera environment.</p></div>
+            <span class="research-tag">REQUIRED</span>
+          </article>
+          <article class="research-row">
+            <span class="research-index">B</span>
+            <div><h3>Thermal activity model</h3><p>Use a dedicated approach for 32×24 thermal frames instead of applying an RGB model without validation.</p></div>
+            <span class="research-tag">REQUIRED</span>
+          </article>
+          <article class="research-row">
+            <span class="research-index">C</span>
+            <div><h3>Temporal + perimeter context</h3><p>Persistence and user-defined zones help distinguish meaningful activity from transient scene changes.</p></div>
+            <span class="research-tag">DETERMINISTIC</span>
+          </article>
+          <article class="research-row">
+            <span class="research-index">D</span>
+            <div><h3>Evidence fusion</h3><p>Combine qualified signals with a transparent state machine before producing an event record.</p></div>
+            <span class="research-tag">CORE LOGIC</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="principles" class="section principles-section">
+      <div class="container principles-grid">
+        <div class="principles-copy">
+          <p class="eyebrow">04 / OPERATING PRINCIPLES</p>
+          <h2>Technology with<br><em>restraint.</em></h2>
+          <p>Good monitoring is not about claiming certainty. It is about making the limits of a system visible, keeping control with the operator, and collecting no more than the task requires.</p>
+          <a class="text-link" href="PRIVACY.md">Read the privacy policy <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="principle-list">
+          <div><span>01</span><strong>Local-first processing</strong><p>Keep primary sensing and analysis on the edge where practical.</p></div>
+          <div><span>02</span><strong>Explicit uncertainty</strong><p>Do not turn an unvalidated score into a promise.</p></div>
+          <div><span>03</span><strong>Operator control</strong><p>Define zones, retention, access, and deletion before deployment.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section archive-section">
+      <div class="container archive-panel">
+        <div>
+          <p class="eyebrow eyebrow-dark">PROJECT ARCHIVE</p>
+          <h2>The work behind the direction.</h2>
+          <p>Review the supplied planning material, implementation notes, privacy policy, and terms before building the executable system.</p>
+        </div>
+        <div class="archive-links">
+          <a href="docs/AI-IMPLEMENTATION.md">AI implementation notes <span>↗</span></a>
+          <a href="NIGHTJAR_VisionShield_X_Software_Multimodal_Implementation_Plan.docx">Multimodal plan <span>↗</span></a>
+          <a href="TERMS.md">Terms &amp; conditions <span>↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <a class="brand" href="#top"><img src="favicon.svg" alt="" width="30" height="30"><span>VISION<span class="brand-accent">SHIELD</span></span></a>
+      <p>Research archive for responsible edge intelligence.</p>
+      <div class="footer-links"><a href="PRIVACY.md">Privacy</a><a href="TERMS.md">Terms</a><a href="README.md">Project notes</a></div>
+      <p class="copyright">© 2026 VISIONSHIELD</p>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
