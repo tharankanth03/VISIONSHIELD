@@ -5,6 +5,8 @@ from visionshield.agent import VisionShieldAgent
 from visionshield.config import AgentConfig, FusionConfig
 from visionshield.models import EventState, FrameObservation, ObjectDetection, ThermalObservation
 from visionshield.notifier import NullNotifier, format_event_alert
+from visionshield.anomaly import ThermalAnomalyDetector
+from visionshield.perimeter import evaluate
 from visionshield.perception import point_in_polygon
 
 
@@ -62,6 +64,17 @@ class AgentTests(unittest.TestCase):
 
     def test_unconfigured_notifier_does_not_send(self):
         self.assertIsInstance(self.agent.notifier, NullNotifier)
+
+    def test_thermal_anomaly_baseline(self):
+        detector = ThermalAnomalyDetector.fit([[20, 20, 20], [20, 20.1, 19.9]])
+        result = detector.analyze([25, 25, 25])
+        self.assertTrue(result.active)
+        self.assertGreater(result.score, 0)
+
+    def test_perimeter_reports_unconfigured_state(self):
+        decision = evaluate((0.5, 0.5), ())
+        self.assertFalse(decision.configured)
+        self.assertFalse(decision.inside)
 
     def test_confirmed_event_alert_is_not_repeated(self):
         first_rgb, first_thermal = self.observation()

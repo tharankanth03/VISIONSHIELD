@@ -11,6 +11,10 @@ VISIONSHIELD is a privacy-conscious, edge-oriented multimodal agent for combinin
 - Persistent `clear → candidate → confirmed` event state machine.
 - Deterministic, minimal event records.
 - Plain-text phone alerts through an optional Telegram bot integration.
+- Optional Ultralytics YOLO adapter and reproducible training entry point.
+- Dependency-free thermal anomaly baseline and perimeter decision module.
+- Local HTML control UI with JSON observation API.
+- GitHub Actions CI across Python 3.10–3.12.
 - JSON configuration example and a dependency-free CLI smoke run.
 - Architecture, AI implementation, privacy, and terms documentation.
 
@@ -24,7 +28,27 @@ python -m venv .venv
 python -m pip install -e .
 python -m unittest discover -s tests -v
 visionshield --config config.example.json
+visionshield-ui
 ```
+
+Open `http://127.0.0.1:8080` for the local control UI. Its simulator form exercises the same state/fusion pipeline; connect real camera and thermal adapters before treating it as live sensor data.
+
+## AI models and training
+
+Install optional model dependencies only when you are ready to supply data:
+
+```bash
+python -m pip install -e .[ai]
+python scripts/train_yolo.py --data path/to/visionshield.yaml --epochs 50
+```
+
+The `YOLODetector` adapter loads a trained local `.pt` file and returns object labels and calibrated confidence values. The repository does not include weights and cannot honestly train a detector without a labeled, consented dataset. For thermal anomaly detection, fit a baseline from newline-delimited thermal frames:
+
+```bash
+python scripts/fit_thermal_baseline.py thermal-baseline.jsonl thermal-model.json
+```
+
+The baseline is a working statistical fallback, not a learned person classifier. Keep datasets, weights, recordings, and generated `runs/` outside Git.
 
 The default CLI uses deterministic passthrough scores to exercise orchestration. It reports a sample `person` label only because the CLI input supplies that label; it does not claim to detect people. Replace those adapters only after validating real camera and thermal models.
 
@@ -46,13 +70,15 @@ When RGB and thermal evidence remain above the configured threshold, the agent s
 
 The default `cooldown_seconds` value prevents repeated alerts while the same event remains confirmed. Set it to `0` only when every confirmed transition should be delivered to the phone.
 
-## Architecture
+## Project documentation
 
-Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [docs/AI-IMPLEMENTATION.md](docs/AI-IMPLEMENTATION.md) for the contracts, data flow, invariants, and integration plan.
+Read [docs/SYSTEM-ARCHITECTURE.md](docs/SYSTEM-ARCHITECTURE.md), [docs/AI-SYSTEM.md](docs/AI-SYSTEM.md), and [docs/MODEL-GOVERNANCE.md](docs/MODEL-GOVERNANCE.md) for the system design and model controls.
 
 ## Responsible deployment
 
-Before connecting sensors, define consent and notice, retention and deletion, operator access, failure behavior, and applicable law. Do not use an unvalidated system for emergency response or decisions about a person's identity, eligibility, or rights. See [PRIVACY.md](PRIVACY.md) and [TERMS.md](TERMS.md).
+Before connecting sensors, define consent and notice, retention and deletion, operator access, failure behavior, and applicable law. Do not use an unvalidated system for emergency response or decisions about a person's identity, eligibility, or rights. See [docs/PRIVACY-POLICY.md](docs/PRIVACY-POLICY.md) and [docs/TERMS-OF-USE.md](docs/TERMS-OF-USE.md).
+
+Security concerns belong in [SECURITY.md](SECURITY.md); contribution rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Repository status
 

@@ -42,6 +42,9 @@ datasets/
 *.pt
 *.pth
 *.tflite
+runs/
+datasets/**/*.yaml
+datasets/**/*.yml
 
 # Coverage and logs
 .coverage
