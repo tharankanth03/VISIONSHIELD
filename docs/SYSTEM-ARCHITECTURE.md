@@ -16,6 +16,7 @@ flowchart LR
   S --> E[Minimal event record]
   E --> N[Telegram / local notifier]
   E --> U[Local HTML UI + JSON API]
+  E --> H[Retention-aware JSONL history]
 ```
 
 ## Runtime invariants
@@ -27,3 +28,4 @@ flowchart LR
 5. Confirmation requires consecutive evidence; alert cooldown prevents flooding.
 6. No event is created before `confirmed`.
 7. YOLO weights, datasets, recordings, and credentials remain outside Git.
+8. Confirmed event metadata is retained locally only for the configured retention period.

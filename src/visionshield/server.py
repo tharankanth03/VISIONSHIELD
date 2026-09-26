@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 from .agent import VisionShieldAgent
 from .config import AgentConfig
 from .models import FrameObservation, ThermalObservation
+from .storage import EventStore
 from datetime import datetime, timezone
 
 HTML = """<!doctype html>
@@ -31,11 +32,27 @@ pre{overflow:auto;color:#b9c9d9;line-height:1.55}.notice{margin-top:20px;color:v
 
 class DashboardHandler(BaseHTTPRequestHandler):
     agent = VisionShieldAgent(AgentConfig())
+    store = EventStore("events/events.jsonl", agent.config.retention_seconds)
     last: dict = {"state": "clear"}
+    last_event_id: str | None = None
 
     def do_GET(self) -> None:
-        if urlparse(self.path).path == "/api/status":
+        path = urlparse(self.path).path
+        if path == "/api/status":
             self._json(self.last)
+        elif path == "/api/events":
+            self._json({"events": self.store.recent()})
+        elif path == "/api/health":
+            self._json({
+                "status": "ok",
+                "state": self.agent.state.value,
+                "event_store": str(self.store.path),
+                "notifications_configured": self.agent.config.notifications.enabled,
+                "model_adapters": {
+                    "rgb": type(self.agent.rgb_detector).__name__,
+                    "thermal": type(self.agent.thermal_model).__name__,
+                },
+            })
         else:
             payload = HTML.encode()
             self.send_response(200)
@@ -56,6 +73,9 @@ class DashboardHandler(BaseHTTPRequestHandler):
             thermal = ThermalObservation(timestamp, float(data["thermal"]))
             evidence = self.agent.process(rgb, thermal)
             self.last = {"evidence": evidence.as_dict()}
+            if self.agent.last_event and self.agent.last_event.event_id != self.last_event_id:
+                self.store.append(self.agent.last_event)
+                self.last_event_id = self.agent.last_event.event_id
             self._json(self.last)
         except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
             self.send_error(400, str(exc))

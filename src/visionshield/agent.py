@@ -31,6 +31,7 @@ class VisionShieldAgent:
     _history: list[float] = field(default_factory=list, init=False)
     _event_sequence: int = field(default=0, init=False)
     _last_alert_at: Optional[datetime] = field(default=None, init=False)
+    _last_event: Optional[Event] = field(default=None, init=False)
 
     def __post_init__(self) -> None:
         self.state_machine = EventStateMachine(self.config.fusion)
@@ -78,6 +79,7 @@ class VisionShieldAgent:
         )
         if previous_state != state and state.value == "confirmed" and can_alert:
             event = self.create_event(evidence)
+            self._last_event = event
             self.notifier.send(self.notifier.format_event(event))
             self._last_alert_at = evidence.timestamp
         return evidence
@@ -99,3 +101,7 @@ class VisionShieldAgent:
     @property
     def state(self):
         return self.state_machine.state
+
+    @property
+    def last_event(self) -> Optional[Event]:
+        return self._last_event

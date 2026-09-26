@@ -10,6 +10,7 @@ The working system is composed of optional model adapters around a deterministic
 | Evidence fusion | Visibility-aware weighted fusion | Held-out threshold calibration |
 | Phone alerts | Telegram Bot API notifier | Bot token and chat ID stored outside Git |
 | Interface | Local HTML dashboard and JSON API | Real camera/thermal adapters |
+| Event history | Retention-aware local JSONL store | Choose retention before deployment |
 
 The repository does not claim a trained model or measured accuracy without your labeled dataset. Use `scripts/train_yolo.py` for training and `scripts/fit_thermal_baseline.py` for a thermal baseline. Record each released model in `docs/MODEL-GOVERNANCE.md`.
 

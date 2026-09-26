@@ -14,6 +14,7 @@ VISIONSHIELD is a privacy-conscious, edge-oriented multimodal agent for combinin
 - Optional Ultralytics YOLO adapter and reproducible training entry point.
 - Dependency-free thermal anomaly baseline and perimeter decision module.
 - Local HTML control UI with JSON observation API.
+- Retention-aware local JSONL event history with health and history endpoints.
 - GitHub Actions CI across Python 3.10–3.12.
 - JSON configuration example and a dependency-free CLI smoke run.
 - Architecture, AI implementation, privacy, and terms documentation.
@@ -32,6 +33,8 @@ visionshield-ui
 ```
 
 Open `http://127.0.0.1:8080` for the local control UI. Its simulator form exercises the same state/fusion pipeline; connect real camera and thermal adapters before treating it as live sensor data.
+
+The local API also exposes `GET /api/health`, `GET /api/status`, and `GET /api/events`. Confirmed events are stored as minimal JSONL records under `events/` and are automatically removed after `retention_seconds`.
 
 ## AI models and training
 

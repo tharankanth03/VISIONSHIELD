@@ -8,6 +8,7 @@ from visionshield.notifier import NullNotifier, format_event_alert
 from visionshield.anomaly import ThermalAnomalyDetector
 from visionshield.perimeter import evaluate
 from visionshield.perception import point_in_polygon
+from visionshield.storage import EventStore
 
 
 class AgentTests(unittest.TestCase):
@@ -75,6 +76,16 @@ class AgentTests(unittest.TestCase):
         decision = evaluate((0.5, 0.5), ())
         self.assertFalse(decision.configured)
         self.assertFalse(decision.inside)
+
+    def test_event_store_round_trip(self):
+        from tempfile import TemporaryDirectory
+        with TemporaryDirectory() as directory:
+            store = EventStore(f"{directory}/events.jsonl", retention_seconds=300)
+            rgb, thermal = self.observation()
+            self.agent.process(rgb, thermal)
+            event = self.agent.create_event(self.agent.process(rgb, thermal))
+            store.append(event)
+            self.assertEqual(store.recent()[0]["event_id"], event.event_id)
 
     def test_confirmed_event_alert_is_not_repeated(self):
         first_rgb, first_thermal = self.observation()
